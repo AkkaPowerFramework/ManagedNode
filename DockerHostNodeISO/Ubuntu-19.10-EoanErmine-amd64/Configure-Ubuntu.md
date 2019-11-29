@@ -2,53 +2,58 @@
 
 The Hyper-V VM should be started by now and Alpine ready to be configured.
 
-The default username for Alpine is ````root```` with out any password set.
+Follow the Live Installer and set the following values:
+
+| key      | value             |
+| -------- | ----------------- |
+| Hostname | AkkaPowerNode-001 |
+| User     | nodeadmin         |
+| Packages | OpenSSH Server    |
+
+ith ````ip addr show```` you get the IP address of the node.
+
+At this time the Node is sufficiently enough configured so you can ssh into with it and do Remoteing with VS Code.
+
+````powershell
+ssh nodeadmin@000.000.000.000 -A # replace the placeholder IP with the correct value
+````
 
 ## Install Perquisite
 
 ````sh
-
-````
-
-## Add the user NodeAdmin
-
-````sh
-addgroup sudo
-adduser NodeAdmin sudo
-EDITOR=nano visudo
-# uncomment %wheel and %sudo thing at end
-````
-
-## Setup SSH
-
-````sh
-nano /etc/ssh/sshd_config
-# make changes
-/etc/init.d/sshd restart
+sudo apt update
+sudo apt upgrade
+sudo apt install linux-azure
 ````
 
 ## Change Login Welcome Text
 
-````sh
-nano /etc/motd
+````bash
+sudo chmod -x /etc/update-motd.d/
+sudo apt install inxi screenfetch
+sudo nano /etc/update-motd.d/01-akkapowernode
 ````
 
 Change it to
 
 ````sh
-Welcome to AkkaPowerNode!
-
-This image is based on Ubuntu. See <>.
-
-See <https://github.com/Stelzi79/AkkaPowerNode.Run> for mor Infos
+#!/bin/sh
+echo "GENERAL SYSTEM INFORMATION"
+/usr/bin/screenfetch
+echo
+echo "SYSTEM DISK USAGE"
+export TERM=xterm; inxi -D
+echo
+echo "Welcome to AkkaPowerNode!"
+echo
+echo "See <https://github.com/Stelzi79/AkkaPowerNode.Run> for mor Infos"
+echo
 ````
 
-## Connect via VSCode
+enable it with
 
-Connect with the following ssh command in VSCode to the Node
-
-````sh
-
+````bash
+sudo chmod +x /etc/update-motd.d/01-akkapowernode
 ````
 
 ## Mount the DataVHD

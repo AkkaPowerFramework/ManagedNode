@@ -16,7 +16,7 @@ if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
   }
 }
 $ofs = "`n"
-Copy-VMFile 
+
 $VmName = "AkkaPowerNode"
 # $VmName = "srv"
 
@@ -45,7 +45,7 @@ $NewVMSwitch = (Get-VMHost).ExternalNetworkAdapters[0].SwitchName
 $NewVHDName = $NewVMName + "-System.vhdx"
 $NewVHDSize = "5GB"
 $NewVHDDataSize = "50GB"
-$NewRamSize = "2GB"
+$NewRamSize = "4GB"
 Write-Output "Next VM `n`tNode-Name: `t$NewVMName`n`tVHD:`t`t$NewVHDName ($NewVHDSize)`n`tRam-Size: `t$NewRamSize`n`tSwitch:`t`t$NewVMSwitch`n`tData-VHD:`t$NewVHDData ($NewVHDDataSize)`n`n"
 
 
@@ -67,12 +67,14 @@ $VMDVDs = (Get-VMDvdDrive -VMName $NewVMName)[0]
 
 Set-VMFirmware -VMName $NewVMName -EnableSecureBoot Off -BootOrder $VMDrives[0], $VMDrives[1], $VMDVDs
 
-Enable-VMIntegrationService -VMName $NewVMName -Name 'Guest Service Interface'
+# Enable-VMIntegrationService -VMName $NewVMName -Name 'Guest Service Interface'
 
 # apt-get update
 # apt-get install linux-azure
 
 # Copy-VMFile
+
+Write-Output "Press Enter to start the configured Node ..."
 
 Start-VM -Name $NewVMName
 
