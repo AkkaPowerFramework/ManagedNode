@@ -16,7 +16,7 @@ if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
   }
 }
 $ofs = "`n"
-
+Copy-VMFile 
 $VmName = "AkkaPowerNode"
 # $VmName = "srv"
 
@@ -67,9 +67,16 @@ $VMDVDs = (Get-VMDvdDrive -VMName $NewVMName)[0]
 
 Set-VMFirmware -VMName $NewVMName -EnableSecureBoot Off -BootOrder $VMDrives[0], $VMDrives[1], $VMDVDs
 
+Enable-VMIntegrationService -VMName $NewVMName -Name 'Guest Service Interface'
+
+# apt-get update
+# apt-get install linux-azure
+
+# Copy-VMFile
+
 Start-VM -Name $NewVMName
 
-Write-Output "The Node has now started. Please procede to Configure-Alpine.md"
+Write-Output "The Node has now started. Please procede to Configure-Ubuntu.md"
 Pause
 
 
