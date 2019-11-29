@@ -93,6 +93,7 @@ sudo apt-get update
 sudo apt-get install apt-transport-https -y
 sudo apt-get update
 sudo apt-get install dotnet-sdk-3.0 -y
+sudo apt-get install dotnet-sdk-2.2.8 -y
 
 ````
 
@@ -133,8 +134,10 @@ docker run hello-world
 
 # NO SUDO ALLOWED
 mkdir /srv/data/buildagent && cd /srv/data/buildagent
-wget -O /tmp/agent.tar.gz https://vstsagentpackage.azureedge.net/agent/2.160.1/vsts-agent-linux-x64-2.160.1.tar.gz
+wget -O /tmp/agent.tar.gz https://vstsagentpackage.azureedge.net/agent/2.161.1/vsts-agent-linux-x64-2.161.1.tar.gz
+
 tar zxvf /tmp/agent.tar.gz
+rm /tmp/agent.tar.gz
 
 sudo ./bin/installdependencies.sh
 ./config.sh
