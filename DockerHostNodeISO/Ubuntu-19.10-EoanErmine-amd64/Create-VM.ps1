@@ -1,8 +1,17 @@
+$excutable = "pwsh"
+if (-not($psversiontable.PSEdition -eq "Core")) {
+  $pwsh = &$excutable -Version
+  if (-Not ($pwsh -eq "")) {
+    $excutable = "powershell"
+    Write-Output "You are running this script in a normal Windows PowerShell session. This script is developed and tested for PowerShell Core. If you encounter unusual errors executing this script, consider installing and running it in PowerShell Core. You can get more information about it at <https://aka.ms/pscore6>."
+  }
+}
+
 # Self-elevate the script if required
 if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
   if ([int](Get-CimInstance -Class Win32_OperatingSystem | Select-Object -ExpandProperty BuildNumber) -ge 6000) {
     $CommandLine = "-File `"" + $MyInvocation.MyCommand.Path + "`" " + $MyInvocation.UnboundArguments + " -NoProfile -NoLogo"
-    Start-Process -FilePath pwsh.exe -Verb Runas -ArgumentList $CommandLine
+    Start-Process -FilePath $excutable -Verb Runas -ArgumentList $CommandLine
     Exit
   }
 }
