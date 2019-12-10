@@ -1,6 +1,6 @@
 # Configure Ubuntu
 
-The Hyper-V VM should be started by now and Alpine ready to be configured.
+The Hyper-V VM should be started by now and Ubuntu 18.04 LTS ready to be configured.
 
 Follow the Live Installer and set the following values:
 
@@ -10,7 +10,11 @@ Follow the Live Installer and set the following values:
 | User     | nodeadmin         |
 | Packages | OpenSSH Server    |
 
-ith ````ip addr show```` you get the IP address of the node.
+````bash
+ip addr show
+````
+
+you get the IP address of the node.
 
 At this time the Node is sufficiently enough configured so you can ssh into with it and do Remoteing with VS Code.
 
@@ -23,20 +27,14 @@ ssh nodeadmin@000.000.000.000 -A # replace the placeholder IP with the correct v
 ````bash
 sudo apt update
 sudo apt upgrade
-sudo apt install linux-azure
-````
-
-## Change Shell to Bash
-
-````sh
-sudo usermod -s /bin/bash nodeadmin
+sudo apt install linux-azure -y
 ````
 
 ## Change Login Welcome Text
 
 ````bash
 sudo chmod -x /etc/update-motd.d/
-sudo apt install inxi screenfetch
+sudo apt install inxi screenfetch -y
 sudo nano /etc/update-motd.d/01-akkapowernode
 ````
 
@@ -79,22 +77,21 @@ nano /etc/fstab
 # append /dev/sdb1               /srv/data          ext4    defaults        1 2
 
 sudo chown -R nodeadmin /srv/data
-exit
+
 reboot
 ````
 
-## Install .net Core 3.0
+## Install .net Core 3.1
 
 ````bash
-wget -q https://packages.microsoft.com/config/ubuntu/19.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
 sudo dpkg -i packages-microsoft-prod.deb
 
+sudo add-apt-repository universe
 sudo apt-get update
 sudo apt-get install apt-transport-https -y
 sudo apt-get update
-sudo apt-get install dotnet-sdk-3.0 -y
-sudo apt-get install dotnet-sdk-2.2.8 -y
-
+sudo apt-get install dotnet-sdk-3.1 dotnet-sdk-2.2.8 -y
 ````
 
 ## Install PowerShell Core
@@ -103,6 +100,7 @@ sudo apt-get install dotnet-sdk-2.2.8 -y
 dotnet tool install --global PowerShell
 # Start PowerShell
 pwsh
+exit
 ````
 
 ## Install Docker
@@ -114,15 +112,15 @@ sudo apt-get update
 
 sudo apt install docker.io -y
 
-sudo gpasswd -a $USER docker
-
 newgrp docker
+
+sudo gpasswd -a $USER docker
 
 mkdir /srv/data/docker
 
 sudo nano /etc/docker/daemon.json
 # add { "data-root": "/srv/data/docker"} in this file
-# rc-update add docker boot
+
 sudo service docker restart
 
 docker run hello-world
@@ -134,12 +132,18 @@ docker run hello-world
 
 # NO SUDO ALLOWED
 mkdir /srv/data/buildagent && cd /srv/data/buildagent
-wget -O /tmp/agent.tar.gz https://vstsagentpackage.azureedge.net/agent/2.161.1/vsts-agent-linux-x64-2.161.1.tar.gz
+wget -O /tmp/agent.tar.gz https://vstsagentpackage.azureedge.net/agent/2.160.1/vsts-agent-linux-x64-2.160.1.tar.gz
 
 tar zxvf /tmp/agent.tar.gz
 rm /tmp/agent.tar.gz
 
 sudo ./bin/installdependencies.sh
 ./config.sh
+sudo ./svc.sh install nodeadmin
+sudo ./svc.sh start
 
 ````
+
+## Next
+
+Now you can trigger any CI/ReleasePipelines build on this managed node to for example install the ManagedNode applications that manages to setup and configure any services you might want to run on this ManagedNode.
