@@ -1,6 +1,8 @@
 # AkkaPowerFramework ManagedNode
 
-Scripts and source code to create and configure a managed Node for the [AkkaPowerFramework](https://github.com/AkkaPowerFramework)
+Scripts and source code to create and configure a managed Node for the [AkkaPowerFramework](https://github.com/AkkaPowerFramework).
+
+This is the only component that needs to be "traditionally" installed on the Docker host and manages the installation of Framework Services. It is the only component that isn't implemented as a Docker container. It is also the only component needed to be installed to add resources to a Cluster.
 
 ## Akka Power Framework
 
