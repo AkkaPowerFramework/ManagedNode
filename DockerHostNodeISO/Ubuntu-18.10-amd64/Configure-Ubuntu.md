@@ -87,6 +87,8 @@ reboot
 wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
 sudo dpkg -i packages-microsoft-prod.deb
 
+sudo apt-get install software-properties-common
+sudo apt-get update
 sudo add-apt-repository universe
 sudo apt-get update
 sudo apt-get install apt-transport-https -y
@@ -97,7 +99,11 @@ sudo apt-get install dotnet-sdk-3.1 dotnet-sdk-2.2.8 -y
 ## Install PowerShell Core
 
 ````bash
-dotnet tool install --global PowerShell
+#dotnet tool install --global PowerShell --version  7.0.0-preview.6
+wget https://aka.ms/install-powershell.sh; sudo bash install-powershell.sh -preview; rm install-powershell.sh
+
+# make an alias for pwsh-preview !!
+
 # Start PowerShell
 pwsh
 exit
