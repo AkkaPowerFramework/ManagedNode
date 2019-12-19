@@ -74,11 +74,16 @@ Set-VMFirmware -VMName $NewVMName -EnableSecureBoot Off -BootOrder $VMDrives[0],
 
 # Copy-VMFile
 
-Write-Output "Press Enter to start the configured Node ..."
+#Write-Output "Press Enter to start the configured Node ..."
 
 Start-VM -Name $NewVMName
 
 Write-Output "The Node has now started. Please procede to Configure-Ubuntu.md"
+
+# http://gyk.lt/ubuntu-16-04-desktop-unattended-installation/
+# https://nx3d.org/ubuntu-1804-preseed/
+# https://askubuntu.com/questions/806820/how-do-i-create-a-completely-unattended-install-of-ubuntu-desktop-16-04-1-lts
+# https://github.com/core-process/linux-unattended-installation
 Pause
 
 
